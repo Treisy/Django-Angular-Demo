@@ -38,32 +38,12 @@ productSvc = function($http, djangoUrl){      // dependencies go in here, actual
     }
 }
 
-productFormCtrl = function($scope, productSvc) {
-  this.create = function(){
-    productSvc.create($scope.product, function(data){
-      $scope.response = data;
-    })
-  }
-  this.reset = function(){
-    $scope.data = data;
-  }
-}
-
-productDetailCtrl = function($routeParams, $scope, productSvc) {
-  productSvc.read($routeParams.productPk, function(data) {
-      $scope.product = data;
-    })
-  this.edit = function(){
-    productSvc.read($routeParams.productPk, function(data) {
-      $scope.product = data;
-    })
-  }
-  this.remove = function(){
-    this.remove = productSvc.remove($routeParams.productPk, function(data) {
-      $scope.response = data;
-    })
-  }
-}
+angular.module('products', []) // module name, no external dependencies
+  .service('productSvc', [     // service name, list of dependencies like Django
+    '$http',                   // Angular.js ajax
+    'djangoUrl',               // Django-Angular URL reverse lookups
+    productSvc,                // Actual service logic assigned to variable and defined above
+  ])
 
 productListCtrl = function($scope, productSvc) {
   productSvc.list(function(data){
@@ -71,11 +51,34 @@ productListCtrl = function($scope, productSvc) {
   })
 }
 
-angular.module('products', []) // module name, no external dependencies
-  .service('productSvc', [     // service name, list of dependencies like Django
-    '$http',                   // Angular.js ajax
-    'djangoUrl',               // Django-Angular URL reverse lookups
-    productSvc,                // Actual service logic assigned to variable and defined above
-  ])
+productFormCtrl = function($scope, productSvc) {
+  var create
+
+  this.create = function(){
+    productSvc.create($scope.product, function(data){
+      $scope.response = data;
+    })
+  }
+}
+
+productDetailCtrl = function($routeParams, $scope, productSvc) {
+  var edit, remove
+
+  productSvc.read($routeParams.productPk, function(data) {
+    $scope.product = data;
+  })
+
+  this.edit = function(pk){
+    productSvc.read(pk, function(data) {
+      $scope.product = data;
+    })
+  }
+
+  this.remove = function(pk){
+    this.remove = productSvc.remove(pk, function(data) {
+      $scope.response = data;
+    })
+  }
+}
 
 })();

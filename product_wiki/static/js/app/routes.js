@@ -14,7 +14,7 @@ angular.module('routes', [  // module name
               })
               .when('/products/', {
                 templateUrl: 'includes/list.html',
-                controllerAs: 'product',
+                controllerAs: 'list',
                 controller: 'productListCtrl'
               })
               .when('/products/new/', {
@@ -22,9 +22,14 @@ angular.module('routes', [  // module name
                 controllerAs: 'product',
                 controller: 'productFormCtrl'
               })
+              .when('/products/new/:productPk/', {
+                templateUrl: 'includes/form.html',
+                controllerAs: 'product',
+                controller: 'productFormCtrl'
+              })
               .when('/products/:productPk/', {
                 templateUrl: 'includes/product.html',
-                controllerAs: 'product',
+                controllerAs: 'detail',
                 controller: 'productDetailCtrl'
               })
               .otherwise({

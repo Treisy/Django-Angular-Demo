@@ -2,6 +2,6 @@
 [[product.name]], [[product.variant]]
 <p>
   <a class="pure-button pure-button-primary" href="#/products/">&lt; Back to List</a> 
-  <a class="pure-button" ng-click="this.edit()">Edit</a>
-  <a class="pure-button" ng-click="this.remove()">Delete</a>
+  <a class="pure-button" href="#/products/new/[[product.pk]]/">Edit</a>
+  <a class="pure-button" ng-click="detail.remove([[product.pk]])">Delete</a>
 </p>
