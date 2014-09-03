@@ -18,8 +18,8 @@ productSvc = function($http, djangoUrl){      // dependencies go in here, actual
 
   this.read = function(pk, callback){         // read one object from list
     this.list(function(data) {
-      var product = data.filter(function(entry){
-        return entry.pk == pk;
+      var product = data.filter(function(item){
+        return item.pk == pk;
       })[0]
       callback(product);
     })
@@ -51,33 +51,36 @@ productListCtrl = function($scope, productSvc) {
   })
 }
 
-productFormCtrl = function($scope, productSvc) {
+productFormCtrl = function($location, $scope, productSvc) {
   var create
 
   this.create = function(){
     productSvc.create($scope.product, function(data){
       $scope.response = data;
     })
+    $location.path("/products/")
   }
+
+  this.edit = function(pk){
+    productSvc.edit(pk, $scope.product, function(data) {
+      $scope.response = data;
+    })
+  }
+
 }
 
-productDetailCtrl = function($routeParams, $scope, productSvc) {
+productDetailCtrl = function($location, $routeParams, $scope, productSvc) {
   var edit, remove
 
   productSvc.read($routeParams.productPk, function(data) {
     $scope.product = data;
   })
 
-  this.edit = function(pk){
-    productSvc.read(pk, function(data) {
-      $scope.product = data;
-    })
-  }
-
   this.remove = function(pk){
     this.remove = productSvc.remove(pk, function(data) {
       $scope.response = data;
     })
+    $location.path("/products/")
   }
 }
 
