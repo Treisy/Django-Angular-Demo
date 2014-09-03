@@ -25,7 +25,7 @@ angular.module('routes', [  // module name
               .when('/products/:productPk/', {
                 templateUrl: 'includes/product.html',
                 controllerAs: 'product',
-                controller: 'productListCtrl'
+                controller: 'productDetailCtrl'
               })
               .otherwise({
                 redirectTo: '/'

@@ -36,7 +36,6 @@ productSvc = function($http, djangoUrl){      // dependencies go in here, actual
       .success(callback)
       .error(callback)
     }
-
 }
 
 productFormCtrl = function($scope, productSvc) {
@@ -50,19 +49,13 @@ productFormCtrl = function($scope, productSvc) {
   }
 }
 
-productListCtrl = function($routeParams, $scope, productSvc) {
-  productSvc.list(function(data){
-    $scope.products = data;
-  })
-  this.read = function(){
-    productSvc.read($routeParams.productPk, function(data) {
+productDetailCtrl = function($routeParams, $scope, productSvc) {
+  productSvc.read($routeParams.productPk, function(data) {
       $scope.product = data;
     })
-  }
   this.edit = function(){
     productSvc.read($routeParams.productPk, function(data) {
       $scope.product = data;
-      this.product = data;
     })
   }
   this.remove = function(){
@@ -70,6 +63,12 @@ productListCtrl = function($routeParams, $scope, productSvc) {
       $scope.response = data;
     })
   }
+}
+
+productListCtrl = function($scope, productSvc) {
+  productSvc.list(function(data){
+    $scope.products = data;
+  })
 }
 
 angular.module('products', []) // module name, no external dependencies
