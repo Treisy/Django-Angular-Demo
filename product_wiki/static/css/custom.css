@@ -1,0 +1,64 @@
+/*
+h1, h2 {
+    font-family: 'Press Start 2P', cursive;
+}
+*/
+
+html {
+  overflow-y: scroll;
+}
+
+legend {
+    margin-left: 4em;
+    font-size: 150%;
+    max-width: 13em;
+}
+
+
+.valid, .invalid {
+    position: relative;
+}
+.valid {
+    display: none;
+}
+.container {
+    padding: 3em 3em 1em 3em;
+}
+
+
+.hero {
+    text-align: center;
+}
+    .hero-titles {
+        font-family: "omnes-pro", sans-serif;
+        padding: 0 1em;
+        margin: 2em auto;
+        max-width: 768px;
+    }
+    .hero-site {
+        font-size: 400%;
+        font-weight: 100;
+        margin: 0;
+        color: #1f8dd6;
+    }
+    .hero-tagline {
+        font-family: 'Press Start 2P', cursive;
+        font-size: 150%;
+        font-weight: 100;
+        line-height: 1.5;
+        margin: 0 0 1em;
+        /*color: #666;*/
+        color: #16161D;
+    }
+
+@media screen and (min-width: 48em) {
+    .hero-titles {
+        padding: 0 2em;
+    }
+    .hero-site {
+        font-size: 600%;
+    }
+    .hero-tagline {
+        font-size: 100%;
+    }
+}

@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load djangular_tags %}
+
+{% block pagetitle %}Django-Angular Exercise{% endblock %}
+
+{% block app %}ng-app="app"{% endblock %}
+
+{% block head %}
+    <link rel='stylesheet' type='text/css' href='http://fonts.googleapis.com/css?family=Press+Start+2P'>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+	<div ng-view></div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script src="{{ STATIC_URL }}js/angular.min.js"></script>
+<script src="{{ STATIC_URL }}js/angular-route.min.js"></script>
+<script src="{{ STATIC_URL }}js/angular-animate.min.js"></script>
+<script src="{{ STATIC_URL }}js/djangular/django-angular.js"></script>
+<script src="{{ STATIC_URL }}js/app/products.js"></script>
+<script src="{{ STATIC_URL }}js/app/routes.js"></script>
+
+<script type="text/javascript">
+(function() {
+'use strict;'
+
+angular.module('app', ['ng.django.urls', 'products', 'routes', ]) // module name and external dependencies
+    .config(['$httpProvider',
+        function($httpProvider) {
+            // Django CSRF protection
+            $httpProvider.defaults.headers.common['X-CSRFToken'] = '{% csrf_value %}';
+            // Headers. Because Django...
+            $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+        }])
+    .config(['$interpolateProvider',
+        function($interpolateProvider) {
+            // Make Angularjs variables different to avoid confusion
+            $interpolateProvider.startSymbol('[[');
+            $interpolateProvider.endSymbol(']]');
+        }])
+    // for Django-Angular reverse URL lookups
+    .constant('patterns',
+        {% load_djng_urls %})
+})();
+</script>
+{% endblock %}

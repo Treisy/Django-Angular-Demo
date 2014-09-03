@@ -1,0 +1,10 @@
+<div class='pure-u-1-2'>
+  <form class='pure-form pure-form-aligned' name='{{ form.form_name }}'>
+    <legend>Product From</legend>
+    {{form.as_p}}
+    <div class='pure-controls'>
+    <button class='pure-button pure-button-primary' ng-disabled='{{ form.form_name }}.$invalid' ng-click='product.create()'>Save</button> 
+    <button class='pure-button' ng-click='product.reset()'>Clear</button>
+    </div>{% csrf_token %}
+  </form>
+</div>
