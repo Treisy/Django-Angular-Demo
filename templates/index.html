@@ -36,25 +36,21 @@
 <script src="{{ STATIC_URL }}js/djangular/django-angular.js"></script>
 <script src="{{ STATIC_URL }}js/app/products.js"></script>
 <script src="{{ STATIC_URL }}js/app/routes.js"></script>
-<script type="text/javascript">
+<script type="text/javascript">      // Configure Angular within template for {-% Djangular tags %-}
 (function() {
-'use strict;'
-angular.module('app', ['ng.django.urls', 'products', 'routes', ]) // module name and external dependencies
+'use strict;'                        // module name and external dependencies
+angular.module('app', ['ng.django.urls', 'products', 'routes', ])
     .config(['$httpProvider',
-        function($httpProvider) {
-            // Django CSRF protection
+        function($httpProvider) {    // Django CSRF protection and headers
             $httpProvider.defaults.headers.common['X-CSRFToken'] = '{% csrf_value %}';
-            // Headers. Because Django...
             $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
         }])
-    .config(['$interpolateProvider',
+    .config(['$interpolateProvider', // Make Angularjs variables different to avoid confusion
         function($interpolateProvider) {
-            // Make Angularjs variables different to avoid confusion
             $interpolateProvider.startSymbol('[[');
             $interpolateProvider.endSymbol(']]');
         }])
-    // for Django-Angular reverse URL lookups
-    .constant('patterns',
+    .constant('patterns',            // for Django-Angular reverse URL lookups
         {% load_djng_urls %})
 })();
 </script>

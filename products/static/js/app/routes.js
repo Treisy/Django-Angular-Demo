@@ -2,7 +2,7 @@
 'use strict;'
 
 angular.module('routes', [   // module name
-  'ngRoute',                 // Angular.js route module
+  'ngRoute',                 // Angular.js routing module
   'products'                 // Think of this like imports
   ])
   .config(['$routeProvider', // Think of this like Django URLS
