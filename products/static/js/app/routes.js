@@ -24,7 +24,14 @@ angular.module('routes', [   // module name
         .when('/products/new/:productPk/', {
           templateUrl: 'includes/form.html',
           controllerAs: 'product',
-          controller: 'productFormCtrl'
+          controller: 'productFormCtrl',
+/*
+          resolve: function(){
+            if (productSvc._curObject == undefined) {
+              $location.path("/products/")
+            }
+          }
+*/
         })
         .when('/products/:productPk/', {
           templateUrl: 'includes/product.html',
@@ -44,21 +51,24 @@ productListCtrl = function($scope, productSvc) {
 
 productFormCtrl = function($location, $routeParams, $scope, productSvc) {
   var save
+  var numTypes = [ 'size', ]
 
   if ($routeParams.productPk != undefined) {
+    if (productSvc._curObject == undefined) {
+      $location.path("/products/")
+    }
     object = productSvc._curObject
     for (key in object) {
       if (object.hasOwnProperty(key)) {
-        numTypes = [ 'size', ]
         numTypes.indexOf(key) >= 0 ? this[key] = parseInt(object[key]) : this[key] = object[key]
       }
     }
     this.save = function(){
-      productSvc.update($routeParams.productPk, $scope.product, function(data) {
-        $scope.response = data;
-      })
-      $location.path("/products/")
-    }
+    productSvc.update($routeParams.productPk, $scope.product, function(data) {
+      $scope.response = data;
+    })
+    $location.path("/products/")
+  }
   } else {
     this.save = function(){
       productSvc.create($scope.product, function(data){
@@ -73,8 +83,8 @@ productDetailCtrl = function($location, $routeParams, $scope, productSvc) {
   var remove
 
   productSvc.read($routeParams.productPk, function(data) {
-    $scope.product = data
     productSvc._curObject = data
+    $scope.product = data
   })
   this.remove = function(pk){
     this.remove = productSvc.remove(pk, function(data) {

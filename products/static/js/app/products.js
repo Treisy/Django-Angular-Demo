@@ -1,15 +1,15 @@
 (function() {
 'use strict;'
 
-productSvc = function($http, djangoUrl){      // dependencies go in here, actual javascript below
-  var create, list, read, update, remove      // methods provided by service
-  var _curObject
+productSvc = function($http, djangoUrl){      // Define the service function, dependencies are injected.
+  var create, list, read, update, remove      // List of methods provided by service as variables.
+  var _curObject                              // Storage for current object
 
-  this.create = function(data, callback){     // create an object
+  this.create = function(data, callback){     // POST to create an object
     $http.post(djangoUrl.reverse('product_api'), data)
       .success(callback)
   }
-  this.list = function(callback){             // get list of all objects
+  this.list = function(callback){             // GET list of all objects
     $http.get(djangoUrl.reverse('product_api'))
       .success(callback)
   }
@@ -31,10 +31,10 @@ productSvc = function($http, djangoUrl){      // dependencies go in here, actual
     }
 }
 
-angular.module('products', []) // module name, no external dependencies
-  .service('productSvc', [     // service name, list of dependencies like Django
-    '$http',                   // Angular.js ajax
-    'djangoUrl',               // Django-Angular URL reverse lookups
-    productSvc,                // Actual service logic assigned to variable and defined above
+angular.module('products', []) // Module name. Use then injecing as a dependency in an app.
+  .service('productSvc', [     // Service name, list of dependencies like Django.
+    '$http',                   // Angular.js ajax library.
+    'djangoUrl',               // URL reverse lookups provided by Django-Angular.
+    productSvc,                // Actual service logic assigned to variable so we know when it's the cause of error.
   ])
 })();
