@@ -3,7 +3,7 @@
     <legend>Product From</legend>
     {{form.as_p}}
     <div class='pure-controls'>
-    <button class='pure-button pure-button-primary' ng-disabled='{{ form.form_name }}.$invalid' ng-click='product.create()'>Save</button> 
+    <button class='pure-button pure-button-primary' ng-disabled='{{ form.form_name }}.$invalid' ng-click='product.save()'>Save</button> 
     <button class='pure-button' type='reset'>Clear</button>
     </div>{% csrf_token %}
   </form>

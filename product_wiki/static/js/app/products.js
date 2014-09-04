@@ -3,11 +3,12 @@
 
 productSvc = function($http, djangoUrl){      // dependencies go in here, actual javascript below
   var create, list, read, update, remove      // methods provided by service
+  var _error = "Something went wrong. Sorry."
 
   this.create = function(data, callback){     // create an object
     $http.post(djangoUrl.reverse('product_api'), data)
       .success(callback)
-      .error(callback)
+      .error(console.log(_error))
   }
 
   this.list = function(callback){             // get list of all objects
@@ -26,7 +27,7 @@ productSvc = function($http, djangoUrl){      // dependencies go in here, actual
   }
 
   this.update = function(pk, data, callback){ // update one object
-    $http.put(djangoUrl.reverse('product_api') + "?pk=" + pk, data)
+    $http.post(djangoUrl.reverse('product_api') + "?pk=" + pk, data)
       .success(callback)
       .error(callback)
     }
@@ -51,8 +52,9 @@ productListCtrl = function($scope, productSvc) {
   })
 }
 
-productFormCtrl = function($location, $scope, productSvc) {
-  var create
+productFormCtrl = function($location, $routeParams, $scope, productSvc) {
+  var save, create, edit
+  pk = $routeParams.productPk
 
   this.create = function(){
     productSvc.create($scope.product, function(data){
@@ -61,16 +63,18 @@ productFormCtrl = function($location, $scope, productSvc) {
     $location.path("/products/")
   }
 
-  this.edit = function(pk){
-    productSvc.edit(pk, $scope.product, function(data) {
+  this.edit = function(){
+    productSvc.update(pk, $scope.product, function(data) {
       $scope.response = data;
     })
+    $location.path("/products/")
   }
 
+  $routeParams.productPk == undefined ? this.save = this.create : this.save = this.edit
 }
 
 productDetailCtrl = function($location, $routeParams, $scope, productSvc) {
-  var edit, remove
+  var remove
 
   productSvc.read($routeParams.productPk, function(data) {
     $scope.product = data;
