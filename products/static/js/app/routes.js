@@ -25,13 +25,6 @@ angular.module('routes', [   // module name
           templateUrl: 'includes/form.html',
           controllerAs: 'product',
           controller: 'productFormCtrl',
-/*
-          resolve: function(){
-            if (productSvc._curObject == undefined) {
-              $location.path("/products/")
-            }
-          }
-*/
         })
         .when('/products/:productPk/', {
           templateUrl: 'includes/product.html',
@@ -51,16 +44,16 @@ productListCtrl = function($scope, productSvc) {
 
 productFormCtrl = function($location, $routeParams, $scope, productSvc) {
   var save
-  var numTypes = [ 'size', ]
+  var intTypes = [ 'size', ]
 
+  if (productSvc._curObject == undefined) {
+    $location.path("/products/")
+  }
   if ($routeParams.productPk != undefined) {
-    if (productSvc._curObject == undefined) {
-      $location.path("/products/")
-    }
     object = productSvc._curObject
     for (key in object) {
       if (object.hasOwnProperty(key)) {
-        numTypes.indexOf(key) >= 0 ? this[key] = parseInt(object[key]) : this[key] = object[key]
+        intTypes.indexOf(key) >= 0 ? this[key] = parseInt(object[key]) : this[key] = object[key]
       }
     }
     this.save = function(){

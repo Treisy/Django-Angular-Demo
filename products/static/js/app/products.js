@@ -5,15 +5,19 @@ productSvc = function($http, djangoUrl){      // Define the service function, de
   var create, list, read, update, remove      // List of methods provided by service as variables.
   var _curObject                              // Storage for current object
 
-  this.create = function(data, callback){     // POST to create an object
+  this.list = function(callback){             // GET list of objects from server
+    $http.get(djangoUrl.reverse('product_api'))
+      .success(callback)                      // Callback was provided upon calling the function
+  }
+  this.create = function(data, callback){     // POST an object to server
     $http.post(djangoUrl.reverse('product_api'), data)
       .success(callback)
   }
-  this.list = function(callback){             // GET list of all objects
-    $http.get(djangoUrl.reverse('product_api'))
+  this.update = function(pk, data, callback){ // update one object by POST
+    $http.post(djangoUrl.reverse('product_api') + "?pk=" + pk, data)
       .success(callback)
-  }
-  this.read = function(pk, callback){         // read one object from list
+    }
+  this.read = function(pk, callback){         // Get single object from server
     this.list(function(data) {
       var object = data.filter(function(item){
         return item.pk == pk;
@@ -21,11 +25,7 @@ productSvc = function($http, djangoUrl){      // Define the service function, de
       callback(object);
     })
   }
-  this.update = function(pk, data, callback){ // update one object
-    $http.post(djangoUrl.reverse('product_api') + "?pk=" + pk, data)
-      .success(callback)
-    }
-  this.remove = function(pk, callback){       // remove one object
+  this.remove = function(pk, callback){       // DELETE an object from server
     $http.delete(djangoUrl.reverse('product_api') + "?pk=" + pk)
       .success(callback)
     }
@@ -35,6 +35,6 @@ angular.module('products', []) // Module name. Use then injecing as a dependency
   .service('productSvc', [     // Service name, list of dependencies like Django.
     '$http',                   // Angular.js ajax library.
     'djangoUrl',               // URL reverse lookups provided by Django-Angular.
-    productSvc,                // Actual service logic assigned to variable so we know when it's the cause of error.
+    productSvc,                // Actual service logic. When it causes an error, we know it's from here.
   ])
 })();

@@ -4,6 +4,11 @@ h1, h2 {
 }
 */
 
+[ng-cloak]
+{
+  display: none !important;
+}
+
 html {
   overflow-y: scroll;
 }
