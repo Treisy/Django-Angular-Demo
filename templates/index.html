@@ -36,11 +36,9 @@
 <script src="{{ STATIC_URL }}js/djangular/django-angular.js"></script>
 <script src="{{ STATIC_URL }}js/app/products.js"></script>
 <script src="{{ STATIC_URL }}js/app/routes.js"></script>
-
 <script type="text/javascript">
 (function() {
 'use strict;'
-
 angular.module('app', ['ng.django.urls', 'products', 'routes', ]) // module name and external dependencies
     .config(['$httpProvider',
         function($httpProvider) {

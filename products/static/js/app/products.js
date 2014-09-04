@@ -37,5 +37,4 @@ angular.module('products', []) // module name, no external dependencies
     'djangoUrl',               // Django-Angular URL reverse lookups
     productSvc,                // Actual service logic assigned to variable and defined above
   ])
-
 })();
