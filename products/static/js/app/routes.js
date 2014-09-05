@@ -46,10 +46,10 @@ productFormCtrl = function($location, $routeParams, $scope, productSvc) {
   var save
   var intTypes = [ 'size', ]
 
-  if (productSvc._curObject == undefined) {
-    $location.path("/products/")
-  }
   if ($routeParams.productPk != undefined) {
+    if (productSvc._curObject == undefined) {
+      $location.path("/products/")
+    }
     object = productSvc._curObject
     for (key in object) {
       if (object.hasOwnProperty(key)) {

@@ -24,3 +24,11 @@ class PartialView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(PartialView, self).get_context_data(**kwargs)
         return context
+
+class Auth(FormView):
+    template_name = 'form.html'
+
+    def get(self, request, *args, **kwargs):
+        form = ProductForm(initial=None)
+        return render(request, self.template_name, {'form': form})
+
