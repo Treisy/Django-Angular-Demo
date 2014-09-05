@@ -1,23 +1,32 @@
 (function() {
 'use strict;'
 
-productSvc = function($http, djangoUrl){      // Define the service function, dependencies are injected.
-  var create, list, read, update, remove      // List of methods provided by service as variables.
-  var _curObject                              // Storage for current object
+// Define the service function, dependencies are injected.
+productSvc = function($http, djangoUrl){
+  // List of methods provided by service as variables.
+  var create, list, read, update, remove
+  // Storage for current object
+  var _curObject
 
-  this.list = function(callback){             // GET list of objects from server
+  // GET list of objects from the server
+  this.list = function(callback){
     $http.get(djangoUrl.reverse('product_api'))
-      .success(callback)                      // Callback was provided upon calling the function
+      // Callback was provided upon calling the function
+      .success(callback)
   }
-  this.create = function(data, callback){     // POST an object to server
+  // POST a new object to the server
+  this.create = function(data, callback){
     $http.post(djangoUrl.reverse('product_api'), data)
       .success(callback)
   }
-  this.update = function(pk, data, callback){ // update one object by POST
+  // Update one object by POSTing to its URL
+  this.update = function(pk, data, callback){
     $http.post(djangoUrl.reverse('product_api') + "?pk=" + pk, data)
       .success(callback)
     }
-  this.read = function(pk, callback){         // Get single object from server
+  // GET objects from the server
+  this.read = function(pk, callback){
+    // Get an object with pk from array
     this.list(function(data) {
       var object = data.filter(function(item){
         return item.pk == pk;
@@ -25,16 +34,22 @@ productSvc = function($http, djangoUrl){      // Define the service function, de
       callback(object);
     })
   }
-  this.remove = function(pk, callback){       // DELETE an object from server
+  // DELETE an object from server
+  this.remove = function(pk, callback){
     $http.delete(djangoUrl.reverse('product_api') + "?pk=" + pk)
       .success(callback)
     }
 }
 
-angular.module('products', []) // Module name. Use then injecing as a dependency in an app.
-  .service('productSvc', [     // Service name, list of dependencies like Django.
-    '$http',                   // Angular.js ajax library.
-    'djangoUrl',               // URL reverse lookups provided by Django-Angular.
-    productSvc,                // Actual service logic. When it causes an error, we know it's from here.
+// Module name. Use this when injecting as a dependency in an app.
+angular.module('products', [])
+// Service name, list of dependencies like Django.
+  .service('productSvc', [
+    // Angular.js ajax library.
+    '$http',
+    // URL reverse lookups provided by Django-Angular.
+    'djangoUrl',
+    // Store logic in variable. When it causes an error, we know it's from here.
+    productSvc,
   ])
 })();

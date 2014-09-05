@@ -6,8 +6,7 @@ from .views import Index, Form, PartialView
 
 admin.autodiscover()
 
-# partials use only one view class
-# template_name overrides done in here for each
+# Partials use only one class, each one overrides the template_name here
 partial_patterns = patterns('',
     url(r'^hero.html$', PartialView.as_view(template_name='hero.html'), name='hero'),
     url(r'^list.html$', PartialView.as_view(template_name='list.html'), name='list'),
