@@ -90,7 +90,7 @@ productDetailCtrl = function($location, $routeParams, $scope, productSvc) {
   productSvc.read($routeParams.productPk, function(data) {
     // Bind object to scope
     $scope.product = data
-    // Store object in Product Service for use in editing
+    // Store object for use in editing, no need to get from server
     productSvc._curObject = data
   })
   // Scope has remove functionality
