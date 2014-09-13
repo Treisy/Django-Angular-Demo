@@ -7,3 +7,4 @@ class ProductCRUDView(NgCRUDView):
 
 class ProductImageCRUDView(NgCRUDView):
     model = ProductImage
+    slug_field = 'product'

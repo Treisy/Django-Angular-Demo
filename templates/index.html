@@ -12,16 +12,39 @@
 {% endblock %}
 
 {% block nav %}
-<div class="pure-g">
-<div class="pure-u-1-1">
+<div class="pure-g nav">
+
+<div class="pure-u-1-2">
     <div class="pure-menu pure-menu-open pure-menu-horizontal">
         <a href="#" class="pure-menu-heading">Django-Angular</a>
         <ul>
-            <li><a href="#/products/new/">Product Form</a></li>
             <li><a href="#/products/">Product List</a></li>
+            <li><a href="#/products/new/">Product Form</a></li>
+            <li><a href="#/images/new/">Image Form</a></li>
         </ul>
     </div>
 </div>
+
+<div class="pure-u-1-2 nav-userinfo">
+{% if user.is_authenticated %}
+    <div class="nav-user ">
+        <span class="nav-username">{{ user|title }}</span>
+        <a href="/logout/" class="pure-button pure-button-primary">Log out</a>
+    </div>
+{% else %}
+    <form class="pure-form" name='{{ form.form_name }}' action="/" method="post">
+        <fieldset>
+            {% if message %}
+                <span class="message">{{ message }}</span>
+            {% endif %}
+            <div class="credentials">{{ form.username }} {{ form.password }} {% csrf_token %}
+                <button type="submit" class="pure-button pure-button-primary">Sign in</button>
+            </div>
+        </fieldset>
+    </form>
+{% endif %}
+</div>
+
 </div>
 {% endblock %}
 
@@ -39,7 +62,7 @@
 <script src="{{ STATIC_URL }}js/app/products.js"></script>
 <script src="{{ STATIC_URL }}js/app/routes.js"></script>
 <script type="text/javascript">
-// Configure Angular within template for {-% Djangular tags %-}
+// Configure Angular within Django for {-% Djangular tags %-}
 (function() {
 'use strict;'
 // module name and external dependencies

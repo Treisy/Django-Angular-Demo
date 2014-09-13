@@ -29,7 +29,7 @@ productFormCtrl = function($location, $routeParams, $scope, productSvc) {
     }
 
     this.save = function(){
-      productSvc.update($routeParams.productPk, $scope.product, function(data) {
+      productSvc.update(object.pk, $scope.product, function(data) {
         $scope.response = data;
       })
       $location.path("/products/")
@@ -44,16 +44,20 @@ productFormCtrl = function($location, $routeParams, $scope, productSvc) {
   }
 }
 
-productDetailCtrl = function($location, $routeParams, $scope, productSvc) {
+productDetailCtrl = function($location, $routeParams, $scope, productSvc, imageSvc) {
   var remove
 
   productSvc.read($routeParams.productPk, function(data) {
-    if (data.message == "Product matching query does not exist.") {
+    if (data.message == "Products matching the query do not exist.") {
       $scope.response = data.message
       $location.path("/products/")
     }
     $scope.product = data
     productSvc._curObject = data
+  })
+
+  imageSvc.read($routeParams.productPk, function(data) {
+    $scope.images = data
   })
 
   this.remove = function(pk){
@@ -75,13 +79,8 @@ URLS = function($routeProvider) {
       controllerAs: 'list',
       controller: 'productListCtrl'
     })
-    .when('/products/new/', {
-      templateUrl: 'includes/form.html',
-      controllerAs: 'product',
-      controller: 'productFormCtrl'
-    })
-    .when('/products/new/:productPk/', {
-      templateUrl: 'includes/form.html',
+    .when('/products/new/:productPk?', {
+      templateUrl: 'includes/product_form.html',
       controllerAs: 'product',
       controller: 'productFormCtrl',
     })
@@ -89,6 +88,11 @@ URLS = function($routeProvider) {
       templateUrl: 'includes/product.html',
       controllerAs: 'detail',
       controller: 'productDetailCtrl'
+    })
+    .when('/images/', {
+    })
+    .when('/images/new/:imagePk?', {
+      templateUrl: 'includes/image_form.html',
     })
     .otherwise({
       redirectTo: '/'

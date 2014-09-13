@@ -1,6 +1,7 @@
 <div ng-cloak>
   <h2>Product Detail</h2>
-  [[product.name]], [[product.variant]]
+    <img ng-repeat="image in images" class="thumbnail" ng-src="{{ MEDIA_URL }}[[image.filename]]" />
+  <p>[[product.name]], [[product.variant]]</p>
   <p>
     <a class="pure-button pure-button-primary" href="#/products/">&lt; Back to List</a> 
     <a class="pure-button" href="#/products/new/[[product.pk]]/">Edit</a>

@@ -9,33 +9,61 @@ productSvc = function($http, djangoUrl){
   var create, list, read, update, remove
   var _curObject
 
+  // Callbacks were provided upon calling the function
   this.list = function(callback){
     $http.get(djangoUrl.reverse(_api))
       .success(callback)
-      // Callbacks were provided upon calling the function
+  }
+  this.create = function(data, callback){
+    $http.post(djangoUrl.reverse(_api), data)
+      .success(callback)
   }
   this.read = function(pk, callback){
     $http.get(djangoUrl.reverse(_api) + "?pk=" + pk)
       .success(callback)
     }
-/* This is another method of retrieving one object
-    this.list(function(data) {
-      var object = data.filter(function(item){
-        return item.pk == pk;
-      })[0]
-      callback(object);
-    })
-*/
-  this.create = function(data, callback){
-    $http.post(djangoUrl.reverse(_api), data)
-      .success(callback)
-  }
   this.update = function(pk, data, callback){
     $http.post(djangoUrl.reverse(_api) + "?pk=" + pk, data)
       .success(callback)
     }
   this.remove = function(pk, callback){
     $http.delete(djangoUrl.reverse(_api) + "?pk=" + pk)
+      .success(callback)
+    }
+}
+
+// This service deals with communicating with the image API for CRUD.
+imageSvc = function($http, djangoUrl){
+  // API we are using for this service.
+  var _api = 'image_api'
+
+  var create, list, read, update, remove
+  var _curObject
+
+  // Callbacks were provided upon calling the function
+  this.list = function(callback){
+    $http.get(djangoUrl.reverse(_api))
+      .success(callback)
+  }
+  this.create = function(data, callback){
+    $http.post(djangoUrl.reverse(_api), data)
+      .success(callback)
+  }
+  this.read = function(pk, callback){         // read one object from list
+    this.list(function(data) {
+      var product = data.filter(function(entry){
+        return entry.product == pk;
+      })
+      console.log(product)
+      callback(product);
+    })
+  }
+  this.update = function(pk, data, callback){
+    $http.post(djangoUrl.reverse(_api) + "?product=" + pk, data)
+      .success(callback)
+    }
+  this.remove = function(pk, callback){
+    $http.delete(djangoUrl.reverse(_api) + "?product=" + pk)
       .success(callback)
     }
 }
@@ -49,5 +77,10 @@ angular.module('products', [])
     // URL reverse lookups provided by Django-Angular.
     'djangoUrl',
     productSvc,
+  ])
+  .service('imageSvc', [
+    '$http',
+    'djangoUrl',
+    imageSvc,
   ])
 })();
