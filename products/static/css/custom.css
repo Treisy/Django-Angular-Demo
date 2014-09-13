@@ -1,5 +1,18 @@
-[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+[ng\:cloak], [ng-cloak], .ng-cloak {
     display: none !important;
+}
+
+.reveal-animation.ng-enter {
+  -webkit-animation: enter_sequence .5s linear; /* Safari/Chrome */
+  animation: enter_sequence .5s linear; /* IE10+ and Future Browsers */
+}
+@-webkit-keyframes enter_sequence {
+  from { opacity:.2; }
+  to { opacity:1; }
+}
+@keyframes enter_sequence {
+  from { opacity:.2; }
+  to { opacity:1; }
 }
 
 html {

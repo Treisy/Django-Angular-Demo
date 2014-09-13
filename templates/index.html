@@ -6,12 +6,12 @@
 {% block app %}ng-app="app"{% endblock %}
 
 {% block extrahead %}
+    <link rel='stylesheet' type='text/css' href='http://fonts.googleapis.com/css?family=Press+Start+2P'>
     <link rel='stylesheet' type='text/css' href='{{ STATIC_URL }}css/custom.css'>
     <link rel='stylesheet' type='text/css' href='{{ STATIC_URL }}css/pure/pure-mod.css'>
-    <link rel='stylesheet' type='text/css' href='http://fonts.googleapis.com/css?family=Press+Start+2P'>
 {% endblock %}
 
-{% block content %}
+{% block nav %}
 <div class="pure-g">
 <div class="pure-u-1-1">
     <div class="pure-menu pure-menu-open pure-menu-horizontal">
@@ -23,9 +23,11 @@
     </div>
 </div>
 </div>
+{% endblock %}
 
+{% block content %}
 <div class="container">
-	<div ng-view></div> <!-- Template rendering goes in here-->
+	<div ng-view class="reveal-animation"></div>
 </div>
 {% endblock %}
 
@@ -36,21 +38,25 @@
 <script src="{{ STATIC_URL }}js/djangular/django-angular.js"></script>
 <script src="{{ STATIC_URL }}js/app/products.js"></script>
 <script src="{{ STATIC_URL }}js/app/routes.js"></script>
-<script type="text/javascript">      // Configure Angular within template for {-% Djangular tags %-}
+<script type="text/javascript">
+// Configure Angular within template for {-% Djangular tags %-}
 (function() {
-'use strict;'                        // module name and external dependencies
-angular.module('app', ['ng.django.urls', 'products', 'routes', ])
+'use strict;'
+// module name and external dependencies
+angular.module('app', ['ngAnimate', 'ng.django.urls', 'products', 'routes', ])
+    // For Django CSRF protection and headers
     .config(['$httpProvider',
-        function($httpProvider) {    // Django CSRF protection and headers
+        function($httpProvider) {
             $httpProvider.defaults.headers.common['X-CSRFToken'] = '{% csrf_value %}';
             $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
         }])
-    .config(['$interpolateProvider', // Make Angularjs variables different to avoid confusion
+    .config(['$interpolateProvider',
         function($interpolateProvider) {
             $interpolateProvider.startSymbol('[[');
             $interpolateProvider.endSymbol(']]');
         }])
-    .constant('patterns',            // for Django-Angular reverse URL lookups
+    // for Django-Angular reverse URL lookups
+    .constant('patterns',
         {% load_djng_urls %})
 })();
 </script>

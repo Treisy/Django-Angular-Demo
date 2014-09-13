@@ -10,8 +10,8 @@ productListCtrl = function($scope, productSvc) {
 
 productFormCtrl = function($location, $routeParams, $scope, productSvc) {
   var save
-  // List of keys in model which have numerical values.
-  var numTypes = [
+  // List of keys in object which have numerical values.
+  var _numTypes = [
     'size',
   ]
 
@@ -24,7 +24,7 @@ productFormCtrl = function($location, $routeParams, $scope, productSvc) {
     for (key in object) {
       if (object.hasOwnProperty(key)) {
         // Bind to form as number or string as needed.
-        numTypes.indexOf(key) >= 0 ? this[key] = parseInt(object[key]) : this[key] = object[key]
+        _numTypes.indexOf(key) >= 0 ? this[key] = parseInt(object[key]) : this[key] = object[key]
       }
     }
 
