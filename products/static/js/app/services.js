@@ -54,7 +54,6 @@ imageSvc = function($http, djangoUrl){
       var product = data.filter(function(entry){
         return entry.product == pk;
       })
-      console.log(product)
       callback(product);
     })
   }
@@ -69,7 +68,7 @@ imageSvc = function($http, djangoUrl){
 }
 
 // Module name. Use this when injecting as a dependency in an app.
-angular.module('products', [])
+angular.module('services', [])
 // Service name, list of dependencies like Django.
   .service('productSvc', [
     // Angular.js ajax library.
@@ -83,4 +82,5 @@ angular.module('products', [])
     'djangoUrl',
     imageSvc,
   ])
+
 })();

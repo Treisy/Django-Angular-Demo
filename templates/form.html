@@ -1,7 +1,15 @@
 <div ng-cloak>
   <form class='pure-form pure-form-aligned' name='{{ form.form_name }}'>
     <legend>{{ form.form_name }}</legend>
-    {{ form.as_p }}{% csrf_token %}
+    <div class="pure-g">
+    <div class="pure-u-1-2">
+      {{ form.as_p }}
+    </div>
+    <div class="pure-u-1-2">
+      
+    </div>
+    </div>
+    {% csrf_token %}
     <div class='pure-controls'>
     <button class='pure-button pure-button-primary' ng-disabled='{{ form.form_name }}.$invalid' ng-click='{{ form.scope_prefix }}.save()'>Save</button>
     <button class='pure-button' type='reset'>Clear</button>

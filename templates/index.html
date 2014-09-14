@@ -15,14 +15,17 @@
 <div class="pure-g nav">
 
 <div class="pure-u-1-2">
-    <div class="pure-menu pure-menu-open pure-menu-horizontal">
-        <a href="#" class="pure-menu-heading">Django-Angular</a>
-        <ul>
-            <li><a href="#/products/">Product List</a></li>
-            <li><a href="#/products/new/">Product Form</a></li>
-            <li><a href="#/images/new/">Image Form</a></li>
-        </ul>
-    </div>
+  <div class="pure-menu pure-menu-open pure-menu-horizontal">
+    <a href="#" class="pure-menu-heading">Django-Angular</a>
+    <ul>
+      <li><a href="#/products/">Product List</a></li>
+      <li><a href="#/products/new/">Product Form</a></li>
+      <li><a href="#/images/new/">Image Form</a></li>
+      {% if message %}
+      <li><span class="message">{{ message }}</span></li>
+      {% endif %}
+    </ul>
+  </div>
 </div>
 
 <div class="pure-u-1-2 nav-userinfo">
@@ -34,9 +37,6 @@
 {% else %}
     <form class="pure-form" name='{{ form.form_name }}' action="/" method="post">
         <fieldset>
-            {% if message %}
-                <span class="message">{{ message }}</span>
-            {% endif %}
             <div class="credentials">{{ form.username }} {{ form.password }} {% csrf_token %}
                 <button type="submit" class="pure-button pure-button-primary">Sign in</button>
             </div>
@@ -58,29 +58,30 @@
 <script src="{{ STATIC_URL }}js/angular.min.js"></script>
 <script src="{{ STATIC_URL }}js/angular-route.min.js"></script>
 <script src="{{ STATIC_URL }}js/angular-animate.min.js"></script>
-<script src="{{ STATIC_URL }}js/djangular/django-angular.js"></script>
-<script src="{{ STATIC_URL }}js/app/products.js"></script>
+<script src="{{ STATIC_URL }}js/djangular/django-angular.min.js"></script>
+<script src="{{ STATIC_URL }}js/app/services.js"></script>
+<script src="{{ STATIC_URL }}js/app/controllers.js"></script>
 <script src="{{ STATIC_URL }}js/app/routes.js"></script>
 <script type="text/javascript">
 // Configure Angular within Django for {-% Djangular tags %-}
 (function() {
 'use strict;'
 // module name and external dependencies
-angular.module('app', ['ngAnimate', 'ng.django.urls', 'products', 'routes', ])
-    // For Django CSRF protection and headers
-    .config(['$httpProvider',
-        function($httpProvider) {
-            $httpProvider.defaults.headers.common['X-CSRFToken'] = '{% csrf_value %}';
-            $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-        }])
-    .config(['$interpolateProvider',
-        function($interpolateProvider) {
-            $interpolateProvider.startSymbol('[[');
-            $interpolateProvider.endSymbol(']]');
-        }])
-    // for Django-Angular reverse URL lookups
-    .constant('patterns',
-        {% load_djng_urls %})
+angular.module('app', ['ngAnimate', 'ng.django.urls', 'services', 'controllers', 'routes', ])
+  // For Django CSRF protection and headers
+  .config(['$httpProvider',
+    function($httpProvider) {
+      $httpProvider.defaults.headers.common['X-CSRFToken'] = '{% csrf_value %}';
+      $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+    }])
+  .config(['$interpolateProvider',
+    function($interpolateProvider) {
+      $interpolateProvider.startSymbol('[[');
+      $interpolateProvider.endSymbol(']]');
+    }])
+  // for Django-Angular reverse URL lookups
+  .constant('patterns',
+    {% load_djng_urls %})
 })();
 </script>
 {% endblock %}
