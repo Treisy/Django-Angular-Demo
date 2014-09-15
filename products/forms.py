@@ -30,10 +30,3 @@ class ProductImageForm(NgModelFormMixin, ModelForm):
     class Meta:
         model = ProductImage
         fields = 'product' , 'image'
-
-    def __init__(self, *args, **kwargs):
-        super(ProductImageForm, self).__init__(*args, **kwargs)
-        for field_name in self.fields:
-            if field_name == 'image':
-                self.fields[field_name].widget.attrs['nv-file-select'] = ''
-                self.fields[field_name].widget.attrs['uploader'] = 'uploader'

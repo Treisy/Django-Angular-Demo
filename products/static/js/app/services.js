@@ -49,7 +49,8 @@ imageSvc = function($http, djangoUrl){
     $http.post(djangoUrl.reverse(_api), data)
       .success(callback)
   }
-  this.read = function(pk, callback){         // read one object from list
+  this.read = function(pk, callback){
+    // Get list then filter objects
     this.list(function(data) {
       var product = data.filter(function(entry){
         return entry.product == pk;
