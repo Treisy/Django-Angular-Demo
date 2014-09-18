@@ -19,7 +19,7 @@ class Product(models.Model):
 class ProductImage(models.Model):
     product = models.ForeignKey(Product)
     image = models.ImageField(upload_to=MEDIA_ROOT)
-    filename = models.CharField(max_length=50, blank=True)
+    filename = models.CharField(max_length=100, blank=True)
 
     def save(self, *args, **kwargs):
         self.filename = ntpath.basename(self.image.url)
