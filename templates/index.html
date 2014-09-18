@@ -31,7 +31,7 @@
 <div class="pure-u-1-2 nav-userinfo">
 {% if user.is_authenticated %}
     <div class="nav-user ">
-        <span class="nav-username">{{ user|title }}</span>
+        <span class="nav-username"><a href="../admin/products/product/">{{ user|title }}</a></span>
         <a href="/logout/" class="pure-button pure-button-primary">Log out</a>
     </div>
 {% else %}
