@@ -24,8 +24,8 @@ URLS = function($routeProvider) {
     })
     .when('/images/new/:imagePk?', {
       templateUrl: 'includes/image_form.html',
-      controllerAs: 'image',
-      controller: 'imageCtrlFn'
+      //controllerAs: 'image',
+      //controller: 'imageCtrlFn'
     })
     .otherwise({
       redirectTo: '/'

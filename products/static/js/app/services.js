@@ -38,15 +38,10 @@ imageSvc = function($http, djangoUrl){
   var _api = 'image_api'
 
   var create, list, read, update, remove
-  var _curObject
 
   // Callbacks were provided upon calling the function
   this.list = function(callback){
     $http.get(djangoUrl.reverse(_api))
-      .success(callback)
-  }
-  this.create = function(data, callback){
-    $http.post(djangoUrl.reverse(_api), data)
       .success(callback)
   }
   this.read = function(pk, callback){
@@ -58,12 +53,16 @@ imageSvc = function($http, djangoUrl){
       callback(product);
     })
   }
+  this.create = function(data, callback){
+    $http.post(djangoUrl.reverse(_api), data)
+      .success(callback)
+  }
   this.update = function(pk, data, callback){
-    $http.post(djangoUrl.reverse(_api) + "?product=" + pk, data)
+    $http.post(djangoUrl.reverse(_api) + "?pk=" + pk, data)
       .success(callback)
     }
   this.remove = function(pk, callback){
-    $http.delete(djangoUrl.reverse(_api) + "?product=" + pk)
+    $http.delete(djangoUrl.reverse(_api) + "?pk=" + pk)
       .success(callback)
     }
 }

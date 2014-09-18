@@ -70,34 +70,18 @@ productDetailCtrlFn = function($location, $routeParams, $scope, productSvc, imag
 
 imageCtrlFn = function($location, $routeParams, $scope, imageSvc) {
   var save
-  // List of keys in object which have numerical values.
 
   if ($routeParams.imagePk != undefined) {
-    if (imageSvc._curObject == undefined) {
-      $location.path("/products/")
-    }
-
-    object = imageSvc._curObject
-
-    for (key in object) {
-      if (object.hasOwnProperty(key)) {
-        // Bind to form as number or string as needed.
-        _numTypes.indexOf(key) >= 0 ? this[key] = parseInt(object[key]) : this[key] = object[key]
-      }
-    }
-
     this.save = function(){
       imageSvc.update(object.pk, $scope.image, function(data) {
         $scope.response = data;
       })
-      $location.path("/products/" + object.pk)
     }
   } else {
     this.save = function(){
       imageSvc.create($scope.image, function(data){
         $scope.response = data;
       })
-      $location.path("/products/")
     }
   }
 }
