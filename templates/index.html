@@ -6,9 +6,12 @@
 {% block app %}ng-app="app"{% endblock %}
 
 {% block extrahead %}
-    <link rel='stylesheet' type='text/css' href='http://fonts.googleapis.com/css?family=Press+Start+2P'>
-    <link rel='stylesheet' type='text/css' href='{{ STATIC_URL }}css/custom.css'>
-    <link rel='stylesheet' type='text/css' href='{{ STATIC_URL }}css/pure/pure-mod.css'>
+    <link rel='stylesheet' type='text/css'
+          href='http://fonts.googleapis.com/css?family=Press+Start+2P'>
+    <link rel='stylesheet' type='text/css'
+          href='{{ STATIC_URL }}css/custom.css'>
+    <link rel='stylesheet' type='text/css'
+          href='{{ STATIC_URL }}css/pure/pure-mod.css'>
 {% endblock %}
 
 {% block nav %}
@@ -16,7 +19,7 @@
 
 <div class="pure-u-1-2">
   <div class="pure-menu pure-menu-open pure-menu-horizontal">
-    <a href="#" class="pure-menu-heading">Django-Angular</a>
+    <a class="pure-menu-heading" href="#">Django-Angular</a>
     <ul>
       <li><a href="#/products/">Product List</a></li>
       <li><a href="#/products/new/">Product Form</a></li>
@@ -31,14 +34,20 @@
 <div class="pure-u-1-2 nav-userinfo">
 {% if user.is_authenticated %}
     <div class="nav-user ">
-        <span class="nav-username"><a href="../admin/products/product/">{{ user|title }}</a></span>
-        <a href="/logout/" class="pure-button pure-button-primary">Log out</a>
+        <span class="nav-username">
+          <a href="../admin/products/product/">{{ user|title }}</a>
+        </span>
+        <a class="pure-button pure-button-primary" href="/logout/">Log out</a>
     </div>
 {% else %}
-    <form class="pure-form" name='{{ form.form_name }}' action="/" method="post">
+    <form class="pure-form"
+          name='{{ form.form_name }}'
+          action="/"
+          method="post">
         <fieldset>
             <div class="credentials">{{ form.username }} {{ form.password }} {% csrf_token %}
-                <button type="submit" class="pure-button pure-button-primary">Sign in</button>
+                <button class="pure-button pure-button-primary"
+                        type="submit">Sign in</button>
             </div>
         </fieldset>
     </form>
@@ -59,6 +68,16 @@
 <script src="{{ STATIC_URL }}js/angular-route.min.js"></script>
 <script src="{{ STATIC_URL }}js/angular-animate.min.js"></script>
 <script src="{{ STATIC_URL }}js/djangular/django-angular.min.js"></script>
+<script src="{{ STATIC_URL }}js/flow/flow.js"></script>
+<script src="{{ STATIC_URL }}js/flow/provider.js"></script>
+<script src="{{ STATIC_URL }}js/flow/directives/init.js"></script>
+<script src="{{ STATIC_URL }}js/flow/directives/events.js"></script>
+<script src="{{ STATIC_URL }}js/flow/directives/btn.js"></script>
+<script src="{{ STATIC_URL }}js/flow/directives/drop.js"></script>
+<script src="{{ STATIC_URL }}js/flow/directives/transfers.js"></script>
+<script src="{{ STATIC_URL }}js/flow/directives/img.js"></script>
+<script src="{{ STATIC_URL }}js/flow/directives/drag-events.js"></script>
+<script src="{{ STATIC_URL }}js/flow/angular-flow.js"></script>
 <script src="{{ STATIC_URL }}js/app/services.js"></script>
 <script src="{{ STATIC_URL }}js/app/controllers.js"></script>
 <script src="{{ STATIC_URL }}js/app/routes.js"></script>
@@ -66,22 +85,46 @@
 // Configure Angular within Django for {-% Djangular tags %-}
 (function() {
 'use strict;'
-// module name and external dependencies
-angular.module('app', ['ngAnimate', 'ng.django.urls', 'services', 'controllers', 'routes', ])
-  // For Django CSRF protection and headers
+// Angular module name and external dependencies
+angular.module('app', ['ngAnimate', 'ng.django.urls', 'flow', 'services', 'controllers', 'routes', ])
+  // Django CSRF protection and headers
   .config(['$httpProvider',
     function($httpProvider) {
-      $httpProvider.defaults.headers.common['X-CSRFToken'] = '{% csrf_value %}';
-      $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+      $httpProvider.defaults.headers.common['X-CSRFToken'] = '{% csrf_value %}'
+      $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
     }])
+  // Angular variables now look like [[ this ]] not {{ this }}
   .config(['$interpolateProvider',
     function($interpolateProvider) {
-      $interpolateProvider.startSymbol('[[');
-      $interpolateProvider.endSymbol(']]');
+      $interpolateProvider.startSymbol('[[').endSymbol(']]')
     }])
-  // for Django-Angular reverse URL lookups
+  // Django-Angular reverse URL lookups
   .constant('patterns',
     {% load_djng_urls %})
+  //  Flow file upload configs
+  .config(['flowFactoryProvider', function (flowFactoryProvider) {
+    flowFactoryProvider.defaults = {
+      singleFile: true,
+      target: '/products/img/',
+      permanentErrors: [404, 500, 501],
+      testChunks: false,
+    }
+  }])
+  .directive('fileModel', ['$parse', function ($parse) {
+    return {
+      restrict: 'A',
+      link: function(scope, element, attrs) {
+        var model = $parse(attrs.fileModel)
+        var modelSetter = model.assign        
+        element.bind('change', function(){
+          scope.$apply(function(){
+            modelSetter(scope, element[0].files[0])
+          })
+        })
+      }
+    }
+  }])
+
 })();
 </script>
 {% endblock %}

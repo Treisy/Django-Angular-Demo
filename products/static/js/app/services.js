@@ -21,15 +21,50 @@ productSvc = function($http, djangoUrl){
   this.read = function(pk, callback){
     $http.get(djangoUrl.reverse(_api) + "?pk=" + pk)
       .success(callback)
-    }
+  }
   this.update = function(pk, data, callback){
     $http.post(djangoUrl.reverse(_api) + "?pk=" + pk, data)
       .success(callback)
-    }
+  }
   this.remove = function(pk, callback){
     $http.delete(djangoUrl.reverse(_api) + "?pk=" + pk)
       .success(callback)
-    }
+  }
+}
+
+// This service deals with communicating with the tag API for CRUD.
+tagSvc = function($http, djangoUrl){
+  // API we are using for this service.
+  var _api = 'tag_api'
+
+  var create, list, read, update, remove
+
+  // Callbacks were provided upon calling the function
+  this.list = function(callback){
+    $http.get(djangoUrl.reverse(_api))
+      .success(callback)
+  }
+  this.read = function(pk, callback){
+    // Get list then filter objects
+    this.list(function(data) {
+      var objects = data.filter(function(entry){
+        return entry.objects == pk;
+      })
+      callback(objects);
+    })
+  }
+  this.create = function(data, callback){
+    $http.post(djangoUrl.reverse(_api), data)
+      .success(callback)
+  }
+  this.update = function(pk, data, callback){
+    $http.post(djangoUrl.reverse(_api) + "?pk=" + pk, data)
+      .success(callback)
+  }
+  this.remove = function(pk, callback){
+    $http.delete(djangoUrl.reverse(_api) + "?pk=" + pk)
+      .success(callback)
+  }
 }
 
 // This service deals with communicating with the image API for CRUD.
@@ -47,24 +82,26 @@ imageSvc = function($http, djangoUrl){
   this.read = function(pk, callback){
     // Get list then filter objects
     this.list(function(data) {
-      var product = data.filter(function(entry){
-        return entry.product == pk;
+      var objects = data.filter(function(entry){
+        return entry.objects == pk;
       })
-      callback(product);
+      callback(objects);
     })
   }
   this.create = function(data, callback){
-    $http.post(djangoUrl.reverse(_api), data)
+    $http.post(djangoUrl.reverse(_api), data, {
+      headers: {"Content-Type": undefined } //"multipart/form-data"
+    })
       .success(callback)
   }
   this.update = function(pk, data, callback){
     $http.post(djangoUrl.reverse(_api) + "?pk=" + pk, data)
       .success(callback)
-    }
+  }
   this.remove = function(pk, callback){
     $http.delete(djangoUrl.reverse(_api) + "?pk=" + pk)
       .success(callback)
-    }
+  }
 }
 
 // Module name. Use this when injecting as a dependency in an app.
@@ -76,6 +113,11 @@ angular.module('services', [])
     // URL reverse lookups provided by Django-Angular.
     'djangoUrl',
     productSvc,
+  ])
+  .service('tagSvc', [
+    '$http',
+    'djangoUrl',
+    tagSvc,
   ])
   .service('imageSvc', [
     '$http',

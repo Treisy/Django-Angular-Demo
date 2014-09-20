@@ -22,10 +22,20 @@ URLS = function($routeProvider) {
       controllerAs: 'detail',
       controller: 'productDetailCtrlFn'
     })
+    .when('/tags/', {
+      templateUrl: 'includes/list.html',
+      controllerAs: 'tag',
+      controller: 'tagListCtrlFn'
+    })
+    .when('/tags/new/:imagePk?', {
+      templateUrl: 'includes/tag_form.html',
+      controllerAs: 'tag',
+      controller: 'tagFormCtrlFn'
+    })
     .when('/images/new/:imagePk?', {
       templateUrl: 'includes/image_form.html',
-      //controllerAs: 'image',
-      //controller: 'imageCtrlFn'
+      controllerAs: 'image',
+      controller: 'imageCtrlFn'
     })
     .otherwise({
       redirectTo: '/'

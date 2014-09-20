@@ -4,6 +4,7 @@ from product_wiki.settings import MEDIA_ROOT
 
 import ntpath
 
+
 class Product(models.Model):
     name = models.CharField(max_length=50)
     variant = models.CharField(max_length=25)
@@ -16,11 +17,24 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+
 class ProductImage(models.Model):
     product = models.ForeignKey(Product)
     image = models.ImageField(upload_to=MEDIA_ROOT)
     filename = models.CharField(max_length=100, blank=True)
 
+    def __str__(self):
+        return self.filename
+
     def save(self, *args, **kwargs):
         self.filename = ntpath.basename(self.image.url)
         super(ProductImage, self).save(*args, **kwargs)
+
+
+class ProductTags(models.Model):
+    tag = models.CharField(max_length=100)
+    products = models.ManyToManyField(Product)
+
+    def __str__(self):
+        return self.tag
+

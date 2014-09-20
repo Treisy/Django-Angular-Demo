@@ -2,13 +2,15 @@
 'use strict;'
 
 productListCtrlFn = function($scope, productSvc) {
-  productSvc._curObject = undefined
-  productSvc.list(function(data){
+  var s = productSvc
+  s._curObject = undefined
+  s.list(function(data){
     $scope.products = data;
   })
 }
 
 productFormCtrlFn = function($location, $routeParams, $scope, productSvc) {
+  var s = productSvc
   var save
   // List of keys in object which have numerical values.
   var _numTypes = [
@@ -16,11 +18,11 @@ productFormCtrlFn = function($location, $routeParams, $scope, productSvc) {
   ]
 
   if ($routeParams.productPk != undefined) {
-    if (productSvc._curObject == undefined) {
+    if (s._curObject == undefined) {
       $location.path("/products/")
     }
 
-    object = productSvc._curObject
+    object = s._curObject
     for (key in object) {
       if (object.hasOwnProperty(key)) {
         // Bind to form as number or string as needed.
@@ -29,14 +31,14 @@ productFormCtrlFn = function($location, $routeParams, $scope, productSvc) {
     }
 
     this.save = function(){
-      productSvc.update(object.pk, $scope.product, function(data) {
+      s.update(object.pk, $scope.product, function(data) {
         $scope.response = data;
       })
       $location.path("/products/")
     }
   } else {
     this.save = function(){
-      productSvc.create($scope.product, function(data){
+      s.create($scope.product, function(data){
         $scope.response = data;
       })
       $location.path("/products/")
@@ -61,28 +63,71 @@ productDetailCtrlFn = function($location, $routeParams, $scope, productSvc, imag
   })
 
   this.remove = function(pk){
-    this.remove = productSvc.remove(pk, function(data) {
+    this.remove = s.remove(pk, function(data) {
       $scope.response = data
     })
     $location.path("/products/")
   }
 }
 
-imageCtrlFn = function($location, $routeParams, $scope, imageSvc) {
-  var save
+tagListCtrlFn = function($scope, tagSvc) {
+  var s = tagSvc
+  s._curObject = undefined
+  s.list(function(data){
+    $scope.products = data;
+  })
+}
 
-  if ($routeParams.imagePk != undefined) {
+productFormCtrlFn = function($location, $routeParams, $scope, productSvc) {
+  var s = productSvc
+  var save
+  // List of keys in object which have numerical values.
+  var _numTypes = [
+    'size',
+  ]
+
+  if ($routeParams.productPk != undefined) {
+    if (s._curObject == undefined) {
+      $location.path("/products/")
+    }
+
+    object = s._curObject
+    for (key in object) {
+      if (object.hasOwnProperty(key)) {
+        // Bind to form as number or string as needed.
+        _numTypes.indexOf(key) >= 0 ? this[key] = parseInt(object[key]) : this[key] = object[key]
+      }
+    }
+
     this.save = function(){
-      imageSvc.update(object.pk, $scope.image, function(data) {
+      s.update(object.pk, $scope.product, function(data) {
         $scope.response = data;
       })
+      $location.path("/products/")
     }
   } else {
     this.save = function(){
-      imageSvc.create($scope.image, function(data){
+      s.create($scope.product, function(data){
         $scope.response = data;
       })
+      $location.path("/products/")
     }
+  }
+}
+
+
+imageCtrlFn = function($location, $routeParams, $scope, imageSvc) {
+  var s = imageSvc
+  var save
+
+  this.save = function(){
+//    var product = $scope.image.product
+//    $scope.image.product = {"name": product }
+    var data = $scope.image
+    console.log(data)
+    s.create($scope.image, function(data){
+      $scope.response = data;
+    })
   }
 }
 
