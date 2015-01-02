@@ -42,7 +42,6 @@ USE_TZ = True
 # Paths
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 # Full filesystem path to the project.
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
